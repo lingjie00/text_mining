@@ -1,0 +1,109 @@
+---
+title: "Text Mining"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r echo=FALSE}
+library(tidyverse)
+library(tidytext)
+library(textdata)
+library(knitr)
+setwd("/Users/lingjie/Desktop/Projects/Text Analyse/")
+```
+
+## Importing data
+```{r}
+filename = "mayday.csv"
+text = read.csv(filename,sep="|",header=FALSE,stringsAsFactors=FALSE)
+names(text) = c("word")
+```
+
+## Filtering stop words
+```{r}
+words = text %>% unnest_tokens(word,word) %>% filter(!word%in%stop_words$word)
+word_table = words %>% count(word) %>% arrange(desc(n))
+```
+
+Top 20 unique words in the text, less stop words
+```{r echo=FALSE}
+head(word_table,20)
+```
+
+
+## Sentiments
+we use NRC to get our sentiments.
+A description of NRC, taken from NRC website:
+The NRC Emotion Lexicon is a list of English words and their associations with eight basic emotions (anger, fear, anticipation, trust, surprise, sadness, joy, and disgust) and two sentiments (negative and positive). The annotations were manually done by crowdsourcing.
+
+For more info about National Research Council Canada (NRC) Emotion Lexicon, please visit: http://saifmohammad.com/WebPages/NRC-Emotion-Lexicon.htm
+```{r echo=FALSE}
+# get_total_sentiments = function(senti){
+#   nrow(inner_join(words,get_sentiments(senti),by="word"))
+# }
+# 
+# senti_lst = c("bing","afinn","loughran","nrc")
+# sapply(senti_lst,get_total_sentiments)
+```
+
+```{r}
+senti = inner_join(words,get_sentiments("nrc"),by="word")
+senti_table = senti %>% group_by(sentiment) %>% summarize(n=n(), percent = round(n()/nrow(senti)*100) ) %>% arrange(desc(n))
+```
+
+All the sentiments in the text
+```{r echo=FALSE}
+senti_table
+```
+
+All the sentiments breakdown
+```{r echo=FALSE}
+senti_lst = unique(senti$sentiment)
+get_senti_words = function(feeling) {
+  #print(paste0("A list of words that matches the feeling: ",feeling))
+  table = senti %>% filter(sentiment==feeling) %>% arrange(word)
+  kable(table)
+}
+
+cat("anger\n")
+get_senti_words("anger")
+cat("\n")
+
+cat("anticipation\n")
+get_senti_words("anticipation")
+cat("\n")
+
+cat("disgust\n")
+get_senti_words("disgust")
+cat("\n")
+
+cat("fear\n")
+get_senti_words("fear")
+cat("\n")
+
+cat("joy\n")
+get_senti_words("joy")
+cat("\n")
+
+cat("negative\n")
+get_senti_words("negative")
+cat("\n")
+
+cat("positive\n")
+get_senti_words("positive")
+cat("\n")
+
+cat("sadness\n")
+get_senti_words("sadness")
+cat("\n")
+
+cat("surprise\n")
+get_senti_words("surprise")
+cat("\n")
+
+cat("trust\n")
+get_senti_words("trust")
+cat("\n")
+```
+
