@@ -43,13 +43,14 @@ get_senti_words = function(senti, feeling) {
 add_stop_words = function(word) {
   new_stop_word_lst = c(stop_word_lst,word)
   assign("stop_word_lst",new_stop_word_lst,envir = .GlobalEnv)
+  return("added ",word,"\n")
 }
 
 ##########
 #Analysis#
 ##########
 
-additional_stop_words = c("it’s")
+additional_stop_words = c("")
 sapply(additional_stop_words,add_stop_words)
 
 words = get_words(filename)
