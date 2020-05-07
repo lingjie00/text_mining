@@ -1,5 +1,5 @@
-# Text Mining
-This repo includes a series of text mining related scripts.
+# Text Mining - Tracking Sentiments Change
+This repo includes a series of text mining sentiment related scripts.
 
 ## Objective
 The goal of this repo is to create an easy to use script for users to compare and constrast the change in sentiments either by comparing the different texts and/or different time periods.
