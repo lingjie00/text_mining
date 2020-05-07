@@ -4,7 +4,7 @@ library(textdata)
 library(knitr)
 
 path = "/Users/lingjie/Desktop/git/text_mining/data"
-filename = "mayday.csv"
+filename = "two_cities.txt"
 stop_word_lst = stop_words$word
 senti_file = get_sentiments("nrc")
 setwd(path)
